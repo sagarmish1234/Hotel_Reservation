@@ -1,7 +1,7 @@
 package com.work.hotelReservation.adminservice.controller;
 
-import com.work.hotelReservation.adminservice.model.Discount;
-import com.work.hotelReservation.adminservice.payload.DiscountPayload;
+import com.work.hotelReservation.adminservice.model.Voucher;
+import com.work.hotelReservation.adminservice.payload.VoucherPayload;
 import com.work.hotelReservation.adminservice.service.DiscountService;
 import com.work.hotelReservation.adminservice.service.HotelService;
 import com.work.hotelReservation.adminservice.service.RoomService;
@@ -16,28 +16,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/discount")
-public class DiscountController extends BaseController<Discount, DiscountPayload> {
+@RequestMapping("/api/voucher")
+public class VoucherController extends BaseController<Voucher, VoucherPayload>{
     @Autowired
-    public DiscountController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService) {
+    public VoucherController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService) {
         super(discountService, hotelService, roomService, voucherService);
     }
 
     @Override
-    public ResponseEntity<?> createModel(@Valid @RequestBody DiscountPayload payload) {
+    public ResponseEntity<?> createModel(@Valid @RequestBody VoucherPayload payload) {
         try{
-            discountService.saveModel(payload);
-            return ResponseEntity.ok(ApiUtil.generateResponse("message","Saved successfully"));
+            voucherService.saveModel(payload);
+            return ResponseEntity.ok(ApiUtil.generateResponse("message","Saved Successfully"));
         } catch (Exception e) {
-            return ResponseEntity.status(400).body(ApiUtil.generateResponse("message",e.getMessage()));
+            return ResponseEntity.status(404).body(ApiUtil.generateResponse("message",e.getMessage()));
         }
     }
 
     @Override
-    public ResponseEntity<?> updateModel(@PathVariable Long id, @Valid @RequestBody DiscountPayload payload) {
-        try{
-            discountService.updateModel(id,payload);
-            return ResponseEntity.ok(ApiUtil.generateResponse("message","Updated successfully"));
+    public ResponseEntity<?> updateModel(@PathVariable Long id, @Valid @RequestBody VoucherPayload payload) {
+        try {
+            voucherService.updateModel(id, payload);
+            return ResponseEntity.ok(ApiUtil.generateResponse("message","Updated Successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(404).body(ApiUtil.generateResponse("message",e.getMessage()));
         }
@@ -45,8 +45,8 @@ public class DiscountController extends BaseController<Discount, DiscountPayload
 
     @Override
     public ResponseEntity<?> getModel(@PathVariable Long id) {
-        try{
-            Discount model = discountService.getModel(id);
+        try {
+            Voucher model = voucherService.getModel(id);
             return ResponseEntity.ok(model);
         } catch (Exception e) {
             return ResponseEntity.status(404).body(ApiUtil.generateResponse("message",e.getMessage()));
@@ -55,7 +55,8 @@ public class DiscountController extends BaseController<Discount, DiscountPayload
 
     @Override
     public ResponseEntity<?> deleteModel(@PathVariable Long id) {
-            discountService.deleteModel(id);
-            return ResponseEntity.ok(ApiUtil.generateResponse("message","Deleted successfully"));
+        voucherService.deleteModel(id);
+        return ResponseEntity.ok(ApiUtil.generateResponse("message","Deleted Successfully"));
+
     }
 }
