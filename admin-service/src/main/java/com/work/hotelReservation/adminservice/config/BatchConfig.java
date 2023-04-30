@@ -2,6 +2,9 @@ package com.work.hotelReservation.adminservice.config;
 
 import com.work.hotelReservation.adminservice.model.Discount;
 import com.work.hotelReservation.adminservice.model.Hotel;
+import com.work.hotelReservation.adminservice.model.Room;
+import com.work.hotelReservation.adminservice.model.Voucher;
+import com.work.hotelReservation.adminservice.payload.RoomPayload;
 import com.work.hotelReservation.adminservice.utils.ApiUtil;
 import com.work.hotelReservation.adminservice.utils.DbUtil;
 import org.springframework.batch.core.Job;
@@ -9,6 +12,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
@@ -22,6 +26,7 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.ConversionService;
@@ -87,6 +92,22 @@ public class BatchConfig extends DefaultBatchConfiguration {
                 .build();
     }
 
+    @Bean("voucherJob")
+    public Job voucherJob(JobRepository jobRepository,PlatformTransactionManager transactionManager) {
+        return new JobBuilder("VoucherJob", jobRepository)
+                .incrementer(new RunIdIncrementer())
+                .start(voucherStep(jobRepository,transactionManager))
+                .build();
+    }
+
+    @Bean("roomJob")
+    public Job roomJob(JobRepository jobRepository,PlatformTransactionManager transactionManager) {
+        return new JobBuilder("RoomJob", jobRepository)
+                .incrementer(new RunIdIncrementer())
+                .start(roomStep(jobRepository,transactionManager))
+                .build();
+    }
+
 
     //Steps
     @Bean("hotelStep")
@@ -107,6 +128,23 @@ public class BatchConfig extends DefaultBatchConfiguration {
                 .build();
     }
 
+    @Bean("voucherStep")
+    public Step voucherStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("VoucherStep", jobRepository)
+                .<Voucher,Voucher>chunk(100, transactionManager) // or
+                .reader(voucherFlatFileItemReader(null))
+                .writer(voucherWriter())
+                .build();
+    }
+
+    @Bean("roomStep")
+    public Step roomStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) {
+        return new StepBuilder("roomStep", jobRepository)
+                .<RoomPayload,RoomPayload>chunk(100, transactionManager) // or
+                .reader(roomFlatFileItemReader())
+                .writer(roomWriter())
+                .build();
+    }
 
     //Readers
 
@@ -157,6 +195,55 @@ public class BatchConfig extends DefaultBatchConfiguration {
         return flatFileItemReader;
     }
 
+    @Bean
+    @StepScope
+    public FlatFileItemReader<Voucher> voucherFlatFileItemReader(@Value("#{jobParameters['name']}")String name){
+
+        Resource resource =new FileSystemResource(new File(ApiUtil.ABSOLUTE_PATH + "voucher.csv"));
+        FlatFileItemReader<Voucher> flatFileItemReader = new FlatFileItemReader<Voucher>();
+        flatFileItemReader.setResource((resource));
+        System.out.println("Job parameters :- "+name);
+        flatFileItemReader.setLineMapper(new DefaultLineMapper<Voucher>(){
+            {
+                setLineTokenizer(new DelimitedLineTokenizer(){
+                    {
+                        setNames("ID","Code","Price","Is Redeemed");
+                    }
+                });
+                setFieldSetMapper(new BeanWrapperFieldSetMapper<Voucher>(){
+                    {
+                        setTargetType(Voucher.class);
+                    }
+                });
+            }
+        });
+        flatFileItemReader.setLinesToSkip(1);
+        return flatFileItemReader;
+    }
+
+    @Bean
+    public FlatFileItemReader<RoomPayload> roomFlatFileItemReader(){
+        Resource resource =new FileSystemResource(new File(ApiUtil.ABSOLUTE_PATH + "room.csv"));
+        FlatFileItemReader<RoomPayload> flatFileItemReader = new FlatFileItemReader<RoomPayload>();
+        flatFileItemReader.setResource((resource));
+        flatFileItemReader.setLineMapper(new DefaultLineMapper<RoomPayload>(){
+            {
+                setLineTokenizer(new DelimitedLineTokenizer(){
+                    {
+                        setNames("Number","Type","Price","Hotel Id");
+                    }
+                });
+                setFieldSetMapper(new BeanWrapperFieldSetMapper<RoomPayload>(){
+                    {
+                        setTargetType(RoomPayload.class);
+                    }
+                });
+            }
+        });
+        flatFileItemReader.setLinesToSkip(1);
+        return flatFileItemReader;
+    }
+
     //Writer
     @Bean("hotelWriter")
     public JdbcBatchItemWriter<Hotel> hotelWriter() {
@@ -175,6 +262,25 @@ public class BatchConfig extends DefaultBatchConfiguration {
         writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         return writer;
     }
+    @Bean("voucherWriter")
+    @StepScope
+    public JdbcBatchItemWriter<Voucher> voucherWriter() {
+        JdbcBatchItemWriter<Voucher> writer = new JdbcBatchItemWriter<>();
+        writer.setDataSource(primaryDataSource);
+        writer.setSql(DbUtil.VOUCHER_QUERY);
+        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+        return writer;
+    }
+
+    @Bean("roomWriter")
+    public JdbcBatchItemWriter<RoomPayload> roomWriter() {
+        JdbcBatchItemWriter<RoomPayload> writer = new JdbcBatchItemWriter<>();
+        writer.setDataSource(primaryDataSource);
+        writer.setSql(DbUtil.ROOM_QUERY);
+        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+        return writer;
+    }
+
 
 
     @Override
