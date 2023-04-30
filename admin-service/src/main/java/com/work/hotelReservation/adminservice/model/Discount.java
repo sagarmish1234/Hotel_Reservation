@@ -4,6 +4,7 @@ import com.work.hotelReservation.adminservice.payload.DiscountPayload;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,9 +18,9 @@ public class Discount implements BaseModel<DiscountPayload> {
 
     private String name;
 
-    private Date applicableFrom;
+    private LocalDate applicableFrom;
 
-    private Date applicableTill;
+    private LocalDate applicableTill;
 
     private Float percentage;
 

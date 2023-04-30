@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -11,9 +12,9 @@ public class DiscountPayload {
     @NotBlank
     private String name;
     @NotNull
-    private Date applicableFrom;
+    private LocalDate applicableFrom;
     @NotNull
-    private Date applicableTill;
+    private LocalDate applicableTill;
     @NotNull
     private Float percentage;
 }

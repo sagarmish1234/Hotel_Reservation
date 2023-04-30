@@ -1,0 +1,30 @@
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8000
+spring:
+  application:
+    name: admin-service
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+    job:
+      enabled: false
+  datasource:
+    password: P@ssw0rd
+    jdbc-url: jdbc:mysql://localhost:3306/hotelReservation
+    username: root
+  batchdatasource:
+    password: P@ssw0rd
+    jdbc-url: jdbc:mysql://localhost:3306/batchdb
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+
