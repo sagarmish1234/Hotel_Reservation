@@ -1,9 +1,6 @@
 package com.work.hotelReservation.adminservice.controller;
 
-import com.work.hotelReservation.adminservice.service.DiscountService;
-import com.work.hotelReservation.adminservice.service.HotelService;
-import com.work.hotelReservation.adminservice.service.RoomService;
-import com.work.hotelReservation.adminservice.service.VoucherService;
+import com.work.hotelReservation.adminservice.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +11,14 @@ public abstract class BaseController<T,P> {
     final RoomService roomService;
     final VoucherService voucherService;
 
-    public BaseController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService) {
+    final CancellationPolicyService cancellationPolicyService;
+
+    public BaseController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService, CancellationPolicyService cancellationPolicyService) {
         this.discountService = discountService;
         this.hotelService = hotelService;
         this.roomService = roomService;
         this.voucherService = voucherService;
+        this.cancellationPolicyService = cancellationPolicyService;
     }
 
     @PostMapping("/create")

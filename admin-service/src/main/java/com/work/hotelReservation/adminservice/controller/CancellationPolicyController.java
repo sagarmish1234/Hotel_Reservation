@@ -1,7 +1,7 @@
 package com.work.hotelReservation.adminservice.controller;
 
-import com.work.hotelReservation.adminservice.model.Hotel;
-import com.work.hotelReservation.adminservice.payload.HotelPayload;
+import com.work.hotelReservation.adminservice.model.CancellationPolicy;
+import com.work.hotelReservation.adminservice.payload.CancellationPayload;
 import com.work.hotelReservation.adminservice.service.*;
 import com.work.hotelReservation.adminservice.utils.ApiUtil;
 import jakarta.validation.Valid;
@@ -13,28 +13,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/hotel")
-public class HotelController extends BaseController<Hotel, HotelPayload>{
+@RequestMapping("/api/cancellationPolicy")
+public class CancellationPolicyController extends BaseController<CancellationPolicy, CancellationPayload>{
+
     @Autowired
-    public HotelController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService, CancellationPolicyService cancellationPolicyService) {
+    public CancellationPolicyController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService, CancellationPolicyService cancellationPolicyService) {
         super(discountService, hotelService, roomService, voucherService, cancellationPolicyService);
     }
 
     @Override
-    public ResponseEntity<?> createModel(@Valid @RequestBody HotelPayload payload) {
+    public ResponseEntity<?> createModel(@Valid @RequestBody CancellationPayload payload) {
         try{
-            hotelService.saveModel(payload);
-            return ResponseEntity.ok(ApiUtil.generateResponse("message","Saved Successfully"));
+            cancellationPolicyService.saveModel(payload);
+            return ResponseEntity.ok(ApiUtil.generateResponse("message","Saved successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(400).body(ApiUtil.generateResponse("message",e.getMessage()));
         }
     }
 
     @Override
-    public ResponseEntity<?> updateModel(@PathVariable Long id, @Valid @RequestBody HotelPayload payload) {
-        try {
-            hotelService.updateModel(id, payload);
-            return ResponseEntity.ok(ApiUtil.generateResponse("message","Updated Successfully"));
+    public ResponseEntity<?> updateModel(@PathVariable Long id, @Valid @RequestBody CancellationPayload payload) {
+        try{
+            cancellationPolicyService.updateModel(id,payload);
+            return ResponseEntity.ok(ApiUtil.generateResponse("message","Updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(404).body(ApiUtil.generateResponse("message",e.getMessage()));
         }
@@ -42,8 +43,8 @@ public class HotelController extends BaseController<Hotel, HotelPayload>{
 
     @Override
     public ResponseEntity<?> getModel(@PathVariable Long id) {
-        try {
-            Hotel model = hotelService.getModel(id);
+        try{
+            CancellationPolicy model = cancellationPolicyService.getModel(id);
             return ResponseEntity.ok(model);
         } catch (Exception e) {
             return ResponseEntity.status(404).body(ApiUtil.generateResponse("message",e.getMessage()));
@@ -52,7 +53,7 @@ public class HotelController extends BaseController<Hotel, HotelPayload>{
 
     @Override
     public ResponseEntity<?> deleteModel(@PathVariable Long id) {
-        hotelService.deleteModel(id);
-        return ResponseEntity.ok(ApiUtil.generateResponse("message","Deleted Successfully"));
+        cancellationPolicyService.deleteModel(id);
+        return ResponseEntity.ok(ApiUtil.generateResponse("message","Deleted successfully"));
     }
 }

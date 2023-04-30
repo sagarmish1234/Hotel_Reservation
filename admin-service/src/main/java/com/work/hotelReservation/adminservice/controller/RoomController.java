@@ -2,10 +2,7 @@ package com.work.hotelReservation.adminservice.controller;
 
 import com.work.hotelReservation.adminservice.model.Room;
 import com.work.hotelReservation.adminservice.payload.RoomPayload;
-import com.work.hotelReservation.adminservice.service.DiscountService;
-import com.work.hotelReservation.adminservice.service.HotelService;
-import com.work.hotelReservation.adminservice.service.RoomService;
-import com.work.hotelReservation.adminservice.service.VoucherService;
+import com.work.hotelReservation.adminservice.service.*;
 import com.work.hotelReservation.adminservice.utils.ApiUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/room")
 public class RoomController extends BaseController<Room , RoomPayload>{
     @Autowired
-    public RoomController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService) {
-        super(discountService, hotelService, roomService, voucherService);
+    public RoomController(DiscountService discountService, HotelService hotelService, RoomService roomService, VoucherService voucherService, CancellationPolicyService cancellationPolicyService) {
+        super(discountService, hotelService, roomService, voucherService, cancellationPolicyService);
     }
 
     @Override

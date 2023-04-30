@@ -2,19 +2,18 @@ package com.work.hotelReservation.adminservice.service;
 
 import com.work.hotelReservation.adminservice.model.Discount;
 import com.work.hotelReservation.adminservice.payload.DiscountPayload;
-import com.work.hotelReservation.adminservice.repository.DiscountRepository;
-import com.work.hotelReservation.adminservice.repository.HotelRepository;
-import com.work.hotelReservation.adminservice.repository.RoomRepositiory;
-import com.work.hotelReservation.adminservice.repository.VoucherRepository;
+import com.work.hotelReservation.adminservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DiscountService extends BaseService<DiscountPayload,Discount> {
     @Autowired
-    public DiscountService(HotelRepository hotelRepository, DiscountRepository discountRepository, VoucherRepository voucherRepository, RoomRepositiory roomRepositiory) {
-        super(hotelRepository, discountRepository, voucherRepository, roomRepositiory);
+    public DiscountService(HotelRepository hotelRepository, DiscountRepository discountRepository, VoucherRepository voucherRepository, RoomRepositiory roomRepositiory, CancellationPolicyRepository cancellationPolicyRepository) {
+        super(hotelRepository, discountRepository, voucherRepository, roomRepositiory, cancellationPolicyRepository);
     }
+
+
 
     @Override
     public void saveModel(DiscountPayload payload) {
