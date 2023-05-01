@@ -8,6 +8,12 @@ pipeline {
             }
         }
 
+        stage('Verify Java version') {
+            steps {
+                bat 'java --version'
+            }
+        }
+
         stage('Build and Test') {
             steps {
                 bat 'mvn clean install'
