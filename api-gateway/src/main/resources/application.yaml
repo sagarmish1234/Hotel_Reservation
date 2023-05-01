@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+  application:
+    name: api-gateway
+  main:
+    web-application-type: reactive
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    serviceUrl:
+      defaultZone: http://192.168.56.1:8761/eureka/
+server:
+  port: 8888
