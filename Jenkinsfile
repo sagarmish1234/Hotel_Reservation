@@ -20,6 +20,13 @@ pipeline {
             }
         }
 
+        stage('Destroy Images') {
+            steps {
+                bat 'docker-compose down'
+                bat 'docker system prune --force'
+            }
+        }
+
         stage('Build Images') {
             steps {
                 bat 'docker-compose up -d'
