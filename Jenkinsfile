@@ -16,7 +16,7 @@ pipeline {
 
         stage('Run Containers') {
                     steps {
-                        bat '.\start.sh'
+                        bat 'start.bat'
                     }
                 }
 
