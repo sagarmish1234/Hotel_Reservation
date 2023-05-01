@@ -22,7 +22,7 @@ pipeline {
 
         stage('Destroy Images') {
             steps {
-                bat 'docker-compose down'
+                bat 'docker compose down'
                 bat 'docker image prune -a --force'
             }
         }
