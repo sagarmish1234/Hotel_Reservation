@@ -1,0 +1,25 @@
+version: "1.0"
+
+services:
+  eureka-server:
+    image: eureka-server
+    container_name: eureka-server
+    build:
+      context: ./eureka-server
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+    expose:
+      - 8761
+    ports:
+      - 8761:8761
+  admin-service:
+    image: admin-service
+    container_name: admin-service
+    build:
+      context: ./admin-service
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+    expose:
+      - 8000
+    ports:
+      - 8000:8000

@@ -1,4 +1,4 @@
-package com.work.hotelReservation.centralServer;
+package com.work.hotelReservation.eurekaservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

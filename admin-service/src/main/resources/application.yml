@@ -3,7 +3,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://192.168.56.1:8761/eureka/
 server:
   port: 8000
 spring:
@@ -16,11 +16,11 @@ spring:
       enabled: false
   datasource:
     password: P@ssw0rd
-    jdbc-url: jdbc:mysql://localhost:3306/hotelReservation
+    jdbc-url: jdbc:mysql://192.168.56.1:3306/hotelReservation
     username: root
   batchdatasource:
     password: P@ssw0rd
-    jdbc-url: jdbc:mysql://localhost:3306/batchdb
+    jdbc-url: jdbc:mysql://192.168.56.1:3306/batchdb
     username: root
   jpa:
     hibernate:

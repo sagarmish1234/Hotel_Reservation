@@ -1,4 +1,4 @@
-package com.work.hotelReservation.adminservice;
+package com.work.hotelReservation.reservationService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class AdminServiceApplication {
+public class ReservationServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AdminServiceApplication.class, args);
+		SpringApplication.run(ReservationServiceApplication.class, args);
 	}
 
 }
